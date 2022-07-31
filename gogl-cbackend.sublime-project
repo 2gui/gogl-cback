@@ -1,0 +1,67 @@
+{
+    "build_systems":
+    [
+        {
+			"file_regex": "(.+[^:]):(\\d+):(\\d+): (?:fatal )?((?:error|warning): .+)$",
+			"name": "gogl-cbackend (OSX)",
+			"shell_cmd": "make -j8",
+			"syntax": "Packages/CMakeBuilder/Syntax/Make.sublime-syntax",
+			"variants":
+			[
+				{
+					"name": "clean",
+					"shell_cmd": "make -j8 clean",
+				},
+				{
+					"name": "rebuild_cache",
+					"shell_cmd": "make -j8 rebuild_cache",
+				},
+				{
+					"name": "gogl_cback",
+					"shell_cmd": "make -j8 gogl_cback",
+				},
+				{
+					"name": "src/calls.o",
+					"shell_cmd": "make -j8 src/calls.o",
+				},
+				{
+					"name": "src/calls.i",
+					"shell_cmd": "make -j8 src/calls.i",
+				},
+				{
+					"name": "src/calls.s",
+					"shell_cmd": "make -j8 src/calls.s",
+				},
+				{
+					"name": "src/main.o",
+					"shell_cmd": "make -j8 src/main.o"
+				},
+				{
+					"name": "src/main.i",
+					"shell_cmd": "make -j8 src/main.i"
+				},
+				{
+					"name": "src/main.s",
+					"shell_cmd": "make -j8 src/main.s"
+				},
+			],
+			"working_dir": "${project_path}/build",
+		},
+	],
+    "folders":
+    [
+        {
+            "path": ".",
+        },
+		{
+			"path": "../gogl",
+		},
+	],
+    "settings":
+    {
+        "cmake":
+        {
+            "build_folder": "${project_path}/build",
+        },
+    },
+}

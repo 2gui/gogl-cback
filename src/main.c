@@ -1,6 +1,32 @@
 
+#define DEBUG
 
+#include <stdio.h>
+#include <Crpc.h>
+#include <glad/gl.h>
+#include <GLFW/glfw3.h>
+
+#include "bindings.h"
+
+void rglErrorCallback(int code, const char *desc){
+	fprintf(stderr, "OpenGL ERROR: code: %d: %s\n", code, desc);
+}
 
 int main(int argc, const char *argv[]){
-	return 0;
+	point_t *p = newPoint(fdopen(3, "r"), fdopen(4, "w"));
+	bindMethods(p);
+
+	fprintf(stderr, "<<< Initializing glfw\n");
+	int version = glfwInit();
+	if(!version){
+		fprintf(stderr, "<<< Error: failed to initialize glfw\n");
+		return -1;
+	}
+	glfwSetErrorCallback(rglErrorCallback);
+
+	fprintf(stderr, "<<< start listening\n");
+	int code = pointListen(p);
+	fprintf(stderr, "<<< exiting\n");
+	glfwTerminate();
+	return code;
 }
