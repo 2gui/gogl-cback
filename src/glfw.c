@@ -1,285 +1,284 @@
 
+#include <Crpc.h>
+#include <glad/gl.h>
+#include <GLFW/glfw3.h>
+
+#include "macros.h"
 #include "glfw.h"
 
-#define rva_ptr(l, t) ((t*)rva_arg(l, uint64_t))
-#define rva_ptr_ref(l, t) ((t**)rva_arg(l, uint64_t*))
-#define rpc_return_ptr(ctx, ptr) rpc_return_uint64(ctx, (uint64_t)(ptr))
-#define rpc_return_ptr_res(ctx, res) rpc_return_uint64(ctx, (uint64_t*)(res))
+#define CHECK_ERROR_BLOCK(ctx) do{       \
+	const char *err_desc;                  \
+	int err_code = glfwGetError(&err_desc);\
+	if(err_code != GLFW_NO_ERROR){         \
+		return rpc_error_c(ctx, err_code, err_desc);\
+	}                                      \
+}while(0)
 
-
-int rglfwVersion(rpc_context *ctx){
+int RglfwVersion(rpc_context *ctx){
 	rva_list vl = ctx->args;
 	int *v1 = rva_arg(vl, int*), *v2 = rva_arg(vl, int*), *v3 = rva_arg(vl, int*);
 	glfwGetVersion(v1, v2, v3);
-	rpc_return_null(ctx);
-	return 0;
+	CHECK_ERROR_BLOCK(ctx);
+	return rpc_return_null(ctx);
 }
 
 
 //////// window ////////
 
-int rglfwCreateWindow(rpc_context *ctx){
+int RglfwCreateWindow(rpc_context *ctx){
 	rva_list vl = ctx->args;
 	int width = rva_arg(vl, int), height = rva_arg(vl, int);
 	const char *title = rva_arg(vl, char*);
 	GLFWmonitor *monitor = rva_ptr(vl, GLFWmonitor);
 	GLFWwindow *share = rva_ptr(vl, GLFWwindow);
 	GLFWwindow *window = glfwCreateWindow(width, height, title, monitor, share);
-	rpc_return_ptr(ctx, window);
-	return 0;
+	CHECK_ERROR_BLOCK(ctx);
+	return rpc_return_ptr(ctx, window);
 }
 
-int rglfwDestroyWindow(rpc_context *ctx){
+int RglfwDestroyWindow(rpc_context *ctx){
 	rva_list vl = ctx->args;
 	GLFWwindow *window = rva_ptr(vl, GLFWwindow);
 	glfwDestroyWindow(window);
-	rpc_return_null(ctx);
-	return 0;
+	CHECK_ERROR_BLOCK(ctx);
+	return rpc_return_null(ctx);
 }
 
-int rglfwWindowShouldClose(rpc_context *ctx){
+int RglfwWindowShouldClose(rpc_context *ctx){
 	rva_list vl = ctx->args;
 	GLFWwindow *window = rva_ptr(vl, GLFWwindow);
 	int flag = glfwWindowShouldClose(window);
-	rpc_return_bool(ctx, (bool_t)(flag));
-	return 0;
+	CHECK_ERROR_BLOCK(ctx);
+	return rpc_return_bool(ctx, (bool_t)(flag));
 }
 
-int rglfwSetWindowShouldClose(rpc_context *ctx){
+int RglfwSetWindowShouldClose(rpc_context *ctx){
 	rva_list vl = ctx->args;
 	GLFWwindow *window = rva_ptr(vl, GLFWwindow);
 	bool_t flag = rva_arg(vl, bool_t);
 	glfwSetWindowShouldClose(window, (int)(flag));
-	rpc_return_null(ctx);
-	return 0;
+	CHECK_ERROR_BLOCK(ctx);
+	return rpc_return_null(ctx);
 }
 
-int rglfwSetWindowTitle(rpc_context *ctx){
+int RglfwSetWindowTitle(rpc_context *ctx){
 	rva_list vl = ctx->args;
 	GLFWwindow *window = rva_ptr(vl, GLFWwindow);
 	const char *title = rva_arg(vl, char*);
 	glfwSetWindowTitle(window, title);
-	rpc_return_null(ctx);
-	return 0;
+	CHECK_ERROR_BLOCK(ctx);
+	return rpc_return_null(ctx);
 }
 
-int rglfwSetWindowIcon(rpc_context *ctx){
+int RglfwSetWindowIcon(rpc_context *ctx){
 	rva_list vl = ctx->args;
 	GLFWwindow *window = rva_ptr(vl, GLFWwindow);
 	int count = rva_arg(vl, int);
 	GLFWimage *img = rva_ptr(vl, GLFWimage);
 	glfwSetWindowIcon(window, count, img);
-	rpc_return_null(ctx);
-	return 0;
+	CHECK_ERROR_BLOCK(ctx);
+	return rpc_return_null(ctx);
 }
 
-int rglfwGetWindowPos(rpc_context *ctx){
+int RglfwGetWindowPos(rpc_context *ctx){
 	rva_list vl = ctx->args;
 	GLFWwindow *window = rva_ptr(vl, GLFWwindow);
 	int *x = rva_arg(vl, int*), *y = rva_arg(vl, int*);
 	glfwGetWindowPos(window, x, y);
-	rpc_return_null(ctx);
-	return 0;
+	CHECK_ERROR_BLOCK(ctx);
+	return rpc_return_null(ctx);
 }
 
-int rglfwSetWindowPos(rpc_context *ctx){
+int RglfwSetWindowPos(rpc_context *ctx){
 	rva_list vl = ctx->args;
 	GLFWwindow *window = rva_ptr(vl, GLFWwindow);
 	int x = rva_arg(vl, int), y = rva_arg(vl, int);
 	glfwSetWindowPos(window, x, y);
-	rpc_return_null(ctx);
-	return 0;
+	CHECK_ERROR_BLOCK(ctx);
+	return rpc_return_null(ctx);
 }
 
-int rglfwGetWindowSize(rpc_context *ctx){
+int RglfwGetWindowSize(rpc_context *ctx){
 	rva_list vl = ctx->args;
 	GLFWwindow *window = rva_ptr(vl, GLFWwindow);
 	int *width = rva_arg(vl, int*), *height = rva_arg(vl, int*);
 	glfwGetWindowSize(window, width, height);
-	rpc_return_null(ctx);
-	return 0;
+	CHECK_ERROR_BLOCK(ctx);
+	return rpc_return_null(ctx);
 }
 
-int rglfwSetWindowSizeLimits(rpc_context *ctx){
+int RglfwSetWindowSizeLimits(rpc_context *ctx){
 	rva_list vl = ctx->args;
 	GLFWwindow *window = rva_ptr(vl, GLFWwindow);
 	int sw = rva_arg(vl, int), sh = rva_arg(vl, int), lw = rva_arg(vl, int), lh = rva_arg(vl, int);
 	glfwSetWindowSizeLimits(window, sw, sh, lw, lh);
-	rpc_return_null(ctx);
-	return 0;
+	CHECK_ERROR_BLOCK(ctx);
+	return rpc_return_null(ctx);
 }
 
-int rglfwSetWindowAspectRatio(rpc_context *ctx){
+int RglfwSetWindowAspectRatio(rpc_context *ctx){
 	rva_list vl = ctx->args;
 	GLFWwindow *window = rva_ptr(vl, GLFWwindow);
 	int numer = rva_arg(vl, int), denom = rva_arg(vl, int);
 	glfwSetWindowAspectRatio(window, numer, denom);
-	rpc_return_null(ctx);
-	return 0;
+	CHECK_ERROR_BLOCK(ctx);
+	return rpc_return_null(ctx);
 }
 
-int rglfwSetWindowSize(rpc_context *ctx){
+int RglfwSetWindowSize(rpc_context *ctx){
 	rva_list vl = ctx->args;
 	GLFWwindow *window = rva_ptr(vl, GLFWwindow);
 	int width = rva_arg(vl, int), height = rva_arg(vl, int);
 	glfwSetWindowSize(window, width, height);
-	rpc_return_null(ctx);
-	return 0;
+	CHECK_ERROR_BLOCK(ctx);
+	return rpc_return_null(ctx);
 }
 
-int rglfwGetWindowFrameSize(rpc_context *ctx){
+int RglfwGetWindowFrameSize(rpc_context *ctx){
 	rva_list vl = ctx->args;
 	GLFWwindow *window = rva_ptr(vl, GLFWwindow);
 	int *left = rva_arg(vl, int*), *top = rva_arg(vl, int*), *right = rva_arg(vl, int*), *bottom = rva_arg(vl, int*);
 	glfwGetWindowFrameSize(window, left, top, right, bottom);
-	rpc_return_null(ctx);
-	return 0;
+	CHECK_ERROR_BLOCK(ctx);
+	return rpc_return_null(ctx);
 }
 
-int rglfwGetWindowContentScale(rpc_context *ctx){
+int RglfwGetWindowContentScale(rpc_context *ctx){
 	rva_list vl = ctx->args;
 	GLFWwindow *window = rva_ptr(vl, GLFWwindow);
 	float *xscale = rva_arg(vl, float*), *yscale = rva_arg(vl, float*);
 	glfwGetWindowContentScale(window, xscale, yscale);
-	rpc_return_null(ctx);
-	return 0;
+	CHECK_ERROR_BLOCK(ctx);
+	return rpc_return_null(ctx);
 }
 
-int rglfwGetWindowOpacity(rpc_context *ctx){
+int RglfwGetWindowOpacity(rpc_context *ctx){
 	rva_list vl = ctx->args;
 	GLFWwindow *window = rva_ptr(vl, GLFWwindow);
 	float opacity = glfwGetWindowOpacity(window);
-	rpc_return_float32(ctx, opacity);
-	return 0;
+	CHECK_ERROR_BLOCK(ctx);
+	return rpc_return_float32(ctx, opacity);
 }
 
-int rglfwSetWindowOpacity(rpc_context *ctx){
+int RglfwSetWindowOpacity(rpc_context *ctx){
 	rva_list vl = ctx->args;
 	GLFWwindow *window = rva_ptr(vl, GLFWwindow);
 	float opacity = rva_arg(vl, float);
 	glfwSetWindowOpacity(window, opacity);
-	rpc_return_null(ctx);
-	return 0;
+	CHECK_ERROR_BLOCK(ctx);
+	return rpc_return_null(ctx);
 }
 
-int rglfwIconifyWindow(rpc_context *ctx){
+int RglfwIconifyWindow(rpc_context *ctx){
 	rva_list vl = ctx->args;
 	GLFWwindow *window = rva_ptr(vl, GLFWwindow);
 	glfwIconifyWindow(window);
-	rpc_return_null(ctx);
-	return 0;
+	CHECK_ERROR_BLOCK(ctx);
+	return rpc_return_null(ctx);
 }
 
-int rglfwRestoreWindow(rpc_context *ctx){
+int RglfwRestoreWindow(rpc_context *ctx){
 	rva_list vl = ctx->args;
 	GLFWwindow *window = rva_ptr(vl, GLFWwindow);
 	glfwRestoreWindow(window);
-	rpc_return_null(ctx);
-	return 0;
+	CHECK_ERROR_BLOCK(ctx);
+	return rpc_return_null(ctx);
 }
 
-int rglfwMaximizeWindow(rpc_context *ctx){
+int RglfwMaximizeWindow(rpc_context *ctx){
 	rva_list vl = ctx->args;
 	GLFWwindow *window = rva_ptr(vl, GLFWwindow);
 	glfwMaximizeWindow(window);
-	rpc_return_null(ctx);
-	return 0;
+	CHECK_ERROR_BLOCK(ctx);
+	return rpc_return_null(ctx);
 }
 
-int rglfwShowWindow(rpc_context *ctx){
+int RglfwShowWindow(rpc_context *ctx){
 	rva_list vl = ctx->args;
 	GLFWwindow *window = rva_ptr(vl, GLFWwindow);
 	glfwShowWindow(window);
-	rpc_return_null(ctx);
-	return 0;
+	CHECK_ERROR_BLOCK(ctx);
+	return rpc_return_null(ctx);
 }
 
-int rglfwHideWindow(rpc_context *ctx){
+int RglfwHideWindow(rpc_context *ctx){
 	rva_list vl = ctx->args;
 	GLFWwindow *window = rva_ptr(vl, GLFWwindow);
 	glfwHideWindow(window);
-	rpc_return_null(ctx);
-	return 0;
+	CHECK_ERROR_BLOCK(ctx);
+	return rpc_return_null(ctx);
 }
 
-int rglfwFocusWindow(rpc_context *ctx){
+int RglfwFocusWindow(rpc_context *ctx){
 	rva_list vl = ctx->args;
 	GLFWwindow *window = rva_ptr(vl, GLFWwindow);
 	glfwFocusWindow(window);
-	rpc_return_null(ctx);
-	return 0;
+	CHECK_ERROR_BLOCK(ctx);
+	return rpc_return_null(ctx);
 }
 
-int rglfwRequestWindowAttention(rpc_context *ctx){
+int RglfwRequestWindowAttention(rpc_context *ctx){
 	rva_list vl = ctx->args;
 	GLFWwindow *window = rva_ptr(vl, GLFWwindow);
 	glfwRequestWindowAttention(window);
-	rpc_return_null(ctx);
-	return 0;
+	CHECK_ERROR_BLOCK(ctx);
+	return rpc_return_null(ctx);
 }
 
-int rglfwPollEvents(rpc_context *ctx){
-	debugf("24x");
+int RglfwPollEvents(rpc_context *ctx){
 	glfwPollEvents();
-	debugf("y");
-	rpc_return_null(ctx);
-	debugf("z");
-	return 0;
+	CHECK_ERROR_BLOCK(ctx);
+	return rpc_return_null(ctx);
 }
 
-int rglfwWaitEvents(rpc_context *ctx){
+int RglfwWaitEvents(rpc_context *ctx){
 	glfwWaitEvents();
-	rpc_return_null(ctx);
-	return 0;
+	CHECK_ERROR_BLOCK(ctx);
+	return rpc_return_null(ctx);
 }
 
-int rglfwWaitEventsTimeout(rpc_context *ctx){
+int RglfwWaitEventsTimeout(rpc_context *ctx){
 	rva_list vl = ctx->args;
 	double timeout = rva_arg(vl, double);
 	glfwWaitEventsTimeout(timeout);
-	rpc_return_null(ctx);
-	return 0;
+	CHECK_ERROR_BLOCK(ctx);
+	return rpc_return_null(ctx);
 }
 
-int rglfwPostEmptyEvent(rpc_context *ctx){
+int RglfwPostEmptyEvent(rpc_context *ctx){
 	glfwPostEmptyEvent();
-	rpc_return_null(ctx);
-	return 0;
+	CHECK_ERROR_BLOCK(ctx);
+	return rpc_return_null(ctx);
 }
 
-int rglfwSwapBuffers(rpc_context *ctx){
+int RglfwSwapBuffers(rpc_context *ctx){
 	rva_list vl = ctx->args;
-	debugf("28x");
 	GLFWwindow *window = rva_ptr(vl, GLFWwindow);
-	debugf("y");
-	debugf("window: %p", window);
 	glfwSwapBuffers(window);
-	debugf("z");
-	rpc_return_null(ctx);
-	debugf("k");
-	return 0;
+	CHECK_ERROR_BLOCK(ctx);
+	return rpc_return_null(ctx);
 }
 
 //////// context ////////
 
-int rglfwMakeContextCurrent(rpc_context *ctx){
+int RglfwMakeContextCurrent(rpc_context *ctx){
 	rva_list vl = ctx->args;
 	GLFWwindow *window = rva_ptr(vl, GLFWwindow);
 	glfwMakeContextCurrent(window);
-	rpc_return_null(ctx);
-	return 0;
+	CHECK_ERROR_BLOCK(ctx);
+	return rpc_return_null(ctx);
 }
 
-int rglfwGetCurrentContext(rpc_context *ctx){
+int RglfwGetCurrentContext(rpc_context *ctx){
 	GLFWwindow *window = glfwGetCurrentContext();
-	rpc_return_ptr(ctx, window);
-	return 0;
+	CHECK_ERROR_BLOCK(ctx);
+	return rpc_return_ptr(ctx, window);
 }
 
-int rglfwSwapInterval(rpc_context *ctx){
+int RglfwSwapInterval(rpc_context *ctx){
 	rva_list vl = ctx->args;
 	int interval = rva_arg(vl, int);
 	glfwSwapInterval(interval);
-	rpc_return_null(ctx);
-	return 0;
+	CHECK_ERROR_BLOCK(ctx);
+	return rpc_return_null(ctx);
 }

@@ -8,8 +8,8 @@
 
 #include "bindings.h"
 
-void rglErrorCallback(int code, const char *desc){
-	fprintf(stderr, "OpenGL ERROR: code: %d: %s\n", code, desc);
+void rglfwErrorCallback(int code, const char *desc){
+	fprintf(stderr, "GLFW ERROR: code: %d: %s\n", code, desc);
 }
 
 int main(int argc, const char *argv[]){
@@ -22,7 +22,7 @@ int main(int argc, const char *argv[]){
 		fprintf(stderr, "<<< Error: failed to initialize glfw\n");
 		return -1;
 	}
-	glfwSetErrorCallback(rglErrorCallback);
+	glfwSetErrorCallback(rglfwErrorCallback);
 
 	fprintf(stderr, "<<< start listening\n");
 	int code = pointListen(p);
